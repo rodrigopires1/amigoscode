@@ -21,5 +21,4 @@ public class StudentDto {
     @NotNull(message = "date cannot be blank")
     private LocalDate date;
     private Integer age;
-
 }
