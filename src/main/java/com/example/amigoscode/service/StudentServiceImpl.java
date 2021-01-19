@@ -4,6 +4,7 @@ import com.example.amigoscode.domain.Student;
 import com.example.amigoscode.dto.StudentDto;
 import com.example.amigoscode.repository.StudentRepository;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,16 +22,20 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public List<Student> getStudentList() {
-        return studentRepository.findAll();
+    public List<StudentDto> listStudentDto() {
+        List<Student> student = studentRepository.findAll();
+        return modelMapper.map(student, new TypeToken<List<StudentDto>>() {
+        }.getType());
     }
 
-    public Student saveStudent(Student student) {
+    public StudentDto saveStudent(StudentDto student) {
         Optional<Student> studentOptional = studentRepository.findStudentByEmail(student.getEmail());
         if (studentOptional.isPresent()) {
             throw new IllegalStateException("email taken");
         }
-        return studentRepository.save(student);
+        Student student1 = dtoToEntity(student);
+        Student student2 = studentRepository.save(student1);
+        return entityToDto(student2);
     }
 
     public void deleteStudent(Long id) {
@@ -58,7 +63,7 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
-    public StudentDto entitiToDto (Student student) {
+    public StudentDto entityToDto (Student student) {
         return modelMapper.map(student, StudentDto.class);
     }
 

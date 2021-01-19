@@ -13,6 +13,7 @@ import java.time.Period;
 @AllArgsConstructor
 @Entity
 public class Student {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
