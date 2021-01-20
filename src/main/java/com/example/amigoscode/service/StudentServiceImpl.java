@@ -33,8 +33,7 @@ public class StudentServiceImpl implements StudentService {
         if (studentOptional.isPresent()) {
             throw new IllegalStateException("email taken");
         }
-        Student student1 = dtoToEntity(student);
-        Student student2 = studentRepository.save(student1);
+        Student student2 = studentRepository.save(dtoToEntity(student));
         return entityToDto(student2);
     }
 
